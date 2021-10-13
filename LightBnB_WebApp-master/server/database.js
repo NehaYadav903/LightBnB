@@ -183,6 +183,11 @@ const addProperty = function(property) {
     property.number_of_bathrooms,
     property.number_of_bedrooms
   ])
-  .then(res => res.rows);
+  .then((result) => {
+    return result.rows[0];
+  })
+  .catch((err) => {
+    return err.message;
+  });
 }
 exports.addProperty = addProperty;
