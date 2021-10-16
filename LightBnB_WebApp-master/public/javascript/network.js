@@ -45,6 +45,20 @@ function getAllReservations() {
   });
 }
 
+function getUpcomingReservations() {
+  let url = "/api/reservations/upcoming";
+  return $.ajax({
+    url,
+  });
+}
+
+function getIndividualReservation(reservationId) {
+  let url = `/api/reservations/${reservationId}`
+  return $.ajax({
+    url,
+  })
+}
+
 const submitProperty = function(data) {
   return $.ajax({
     method: "POST",
@@ -57,6 +71,36 @@ const submitReservation = function(data) {
   return $.ajax({
     method: "POST",
     url: "/api/reservations",
+    data,
+  })
+}
+
+const updateReservation = function(data) {
+  return $.ajax({
+    method: "POST",
+    url: `/api/reservations/${data.reservation_id}`,
+    data,
+  })
+}
+
+const deleteReservation = function(data) {
+  return $.ajax({
+    method: "DELETE",
+    url: `/api/reservations/${data.reservation_id}`
+  })
+}
+
+const getReviewsByProperty = function(propertyId) {
+  const url = `api/reviews/${propertyId}`;
+  return $.ajax({
+    url,
+  });
+}
+
+const submitReview = function(data) {
+  return $.ajax({
+    method: "POST",
+    url: `api/reviews/${data.reservationId}`,
     data,
   })
 }
