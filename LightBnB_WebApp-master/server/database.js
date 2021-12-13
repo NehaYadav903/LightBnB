@@ -26,6 +26,11 @@ const getUserWithEmail = function(email) {
       return err.message;
     });
 }; 
+// let user;
+// for (const userId in users){
+//   user =users[userId];
+//   if(user.email.tolowerCase() ===email)
+// }
 
 exports.getUserWithEmail = getUserWithEmail;
 
@@ -36,13 +41,13 @@ exports.getUserWithEmail = getUserWithEmail;
  */
 const getUserWithId = function(id) {
   return pool
-  .query(`SELECT * FROM users WHERE id = $1`, [id])
-  .then((result) => {
-    return result.rows[0] || null;
-  })
-  .catch((err) => {
-    return err.message;
-  });
+    .query(`SELECT * FROM users WHERE id = $1`, [id])
+    .then((result) => {
+      return result.rows[0] || null;
+    })
+    .catch((err) => {
+      return err.message;
+    });
 };
 exports.getUserWithId = getUserWithId;
 
