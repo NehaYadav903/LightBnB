@@ -14,6 +14,6 @@ VALUES (1, 1, '2018-09-11', '2018-09-26'),
 (3, 3, '2021-10-01', '2021-10-14');
 
 INSERT INTO property_reviews (guest_id, property_id, reservation_id, rating, message)
-VALUES (2, 5, 10, 3, 'message'), 
+VALUES (2, 5, 7, 3, 'message'), 
 (1, 4, 1, 4, 'message'),
 (8, 1, 2, 4, 'message');
