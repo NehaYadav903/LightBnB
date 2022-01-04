@@ -11,11 +11,30 @@ $(() => {
     $logInForm.detach();
     $signUpForm.detach();
     $newReservationForm.detach();
+    $updateReservationForm.detach();
+    $propertyReviews.detach();
+    $newReviewForm.detach();
     //To make the dates go away when leave the page
-    $('#reservation-details').detach();
+   
     let dataTag = "";
 
     switch (item) {
+      case 'newReview':
+        dataTag = `<h4>${data}</h4>`;
+        $newReviewForm.appendTo($main);
+        $(dataTag).appendTo("#datatag");
+        break;
+      case 'showReviews':
+        getReviewsByProperty(data)
+          .then(reviews => propertyReviews.addReviews(reviews))
+        $propertyReviews.appendTo($main);
+        break;
+      case 'newReservation':
+        dataTag = `<h4>${data}</h4>`;
+        $newReservationForm.appendTo($main);
+        $("#datatag").empty();
+        $(dataTag).appendTo("#datatag");
+        break;
       case 'listings':
         $propertyListings.appendTo($main);
         break;
@@ -31,21 +50,6 @@ $(() => {
       case 'signUp':
         $signUpForm.appendTo($main);
         break;
-      case 'newReservation':
-        dataTag = `<h4>${data}</h4>`;
-        $newReservationForm.appendTo($main);
-        $(dataTag).appendTo("#datatag");
-        break;
-      case 'showReviews':
-        getReviewsByProperty(data)
-       .then(reviews => propertyReviews.addReviews(reviews))
-        $propertyReviews.appendTo($main);
-        break;
-      case 'newReview':
-        dataTag = `<h4>${data}</h4>`;
-        $newReviewForm.appendTo($main);
-        $(dataTag).appendTo("#datatag");
-         break;
       case 'error': {
         const $error = $(`<p>${arguments[1]}</p>`);
         $error.appendTo('body');
@@ -53,11 +57,10 @@ $(() => {
           $error.remove();
           views_manager.show('listings');
         }, 2000);
-        
         break;
       }
-      case 'updateReservation':
   // since we're getting more information here, we can include this in an extended data tag:
+  case 'updateReservation':
   dataTag = `
     <span id="datatag-reservation-id">${data.id}</span>
     <span id="datatag-start-date">${data.start_date}</span>

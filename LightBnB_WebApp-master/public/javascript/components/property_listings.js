@@ -37,18 +37,23 @@ $(() => {
           views_manager.show("updateReservation", data);       
         });  
       })
+
       $('.delete-button').on('click', function() {
         const idData = $(this).attr('id').substring(16);
-        deleteReservation(idData)
+        getIndividualReservation(idData).then(data => {
+          deleteReservation(data)
         .then(() => console.log('Success!'))
         .catch(err => console.error(err));              
-      })
+      });
+    })
+
       $('.add-review-button').on('click', function() {
         const idData = $(this).attr('id').substring(11);
         views_manager.show("newReview", idData);
       })
+
     } else {
-      $(document).on('click','.reserve-button', function() {
+      $('.reserve-button').on('click', function () {
         const idData = $(this).attr('id').substring(17);
         views_manager.show('newReservation', idData);
       })

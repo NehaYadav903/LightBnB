@@ -1,5 +1,5 @@
-SELECT city, count(reservations) as total_reservations
+SELECT city, COUNT(start_date) as total_reservations
 FROM properties
-JOIN reservations ON properties.id = property_id
+JOIN reservations ON property_id = properties.id
 GROUP BY properties.city
 ORDER BY total_reservations DESC;

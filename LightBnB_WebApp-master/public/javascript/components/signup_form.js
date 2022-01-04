@@ -24,21 +24,21 @@ $(() => {
   `);
   window.$signUpForm = $signUpForm;
 
-  $signUpForm.on('submit', function(event) {
+  $signUpForm.on('submit', function (event) {
     event.preventDefault();
 
     const data = $(this).serialize();
     signUp(data)
-      .then(getMyDetails)
+    getMyDetails()
       .then((json) => {
         header.update(json.user);
         views_manager.show('listings');
       });
   });
 
-  $('body').on('click', '#sign-up-form__cancel', function() {
+  $('body').on('click', '#sign-up-form__cancel', function () {
     views_manager.show('listings');
     return false;
   });
-      
+
 });

@@ -20,7 +20,7 @@ $(() => {
 
   window.$logInForm = $logInForm;
 
-  $logInForm.on('submit', function(event) {
+  $logInForm.on('submit', function (event) {
     event.preventDefault();
 
     const data = $(this).serialize();
@@ -37,9 +37,9 @@ $(() => {
       });
   });
 
-  $('body').on('click', '#login-form__cancel', function() {
+  $('body').on('click', '#login-form__cancel', function () {
     views_manager.show('listings');
     return false;
   });
-      
+
 });

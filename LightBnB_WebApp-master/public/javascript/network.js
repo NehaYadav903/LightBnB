@@ -13,11 +13,13 @@ function logOut() {
 }
 
 function logIn(data) {
-  return $.ajax({
+  loginObject = $.ajax({
     method: "POST",
     url: "/users/login",
     data
   });
+  console.log(loginObject)
+  return loginObject
 }
 
 function signUp(data) {
@@ -59,7 +61,7 @@ function getIndividualReservation(reservationId) {
   })
 }
 
-const submitProperty = function(data) {
+const submitProperty = function (data) {
   return $.ajax({
     method: "POST",
     url: "/api/properties",
@@ -67,7 +69,7 @@ const submitProperty = function(data) {
   });
 }
 
-const submitReservation = function(data) {
+const submitReservation = function (data) {
   return $.ajax({
     method: "POST",
     url: "/api/reservations",
@@ -75,7 +77,7 @@ const submitReservation = function(data) {
   })
 }
 
-const updateReservation = function(data) {
+const updateReservation = function (data) {
   return $.ajax({
     method: "POST",
     url: `/api/reservations/${data.reservation_id}`,
@@ -83,24 +85,26 @@ const updateReservation = function(data) {
   })
 }
 
-const deleteReservation = function(data) {
+const deleteReservation = function (data) {
+  console.log('data: ', data)
   return $.ajax({
     method: "DELETE",
-    url: `/api/reservations/${data.reservation_id}`
+    url: `/api/reservations/${data.id}`
   })
 }
 
-const getReviewsByProperty = function(propertyId) {
+const getReviewsByProperty = function (propertyId) {
   const url = `api/reviews/${propertyId}`;
   return $.ajax({
     url,
   });
 }
 
-const submitReview = function(data) {
+const submitReview = function (data) {
+  const url = `/api/reviews/${data.reservationId}`
   return $.ajax({
     method: "POST",
-    url: `api/reviews/${data.reservationId}`,
+    url,
     data,
-  })
+  });
 }
