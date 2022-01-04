@@ -1,7 +1,4 @@
-const { database } = require("pg/lib/defaults");
-
 module.exports = function (router, database) {
-
 
   // get all reservation
   router.get('/properties', (req, res) => {
@@ -38,7 +35,7 @@ module.exports = function (router, database) {
       res.error('💩');
       return;
     }
-    database.getUpcomingReservations(userId)
+    database.updateReservation(userId)
       .then(reservations => res.send({ reservations }))
       .catch(e => {
         console.error(e);
