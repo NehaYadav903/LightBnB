@@ -21,7 +21,7 @@ module.exports = function (router, database) {
       return;
     }
 
-    database.getFulfilledReservations(userId)
+    database.getAllReservations(userId)
       .then(reservations => res.send({ reservations }))
       .catch(e => {
 
