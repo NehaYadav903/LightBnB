@@ -29,11 +29,11 @@ const getUserWithEmail = function (email) {
   return pool
     .query(text, [email])
     .then(result => {
-      if (!result.rows[0]) {
-        return null;
-      } else {
-        return result.rows[0];
-      }
+      // if (!result.rows[0]) {
+      //   return null;
+      // } else {
+      return result.rows[0];
+      // }
     })
     .catch(err => console.error('input error', err.stack));
 };
@@ -79,7 +79,7 @@ const addUser = function (user) {
     .query(newUser, [user.name, user.email, user.password])
     .then((result) => {
       console.log('resolved')
-      return result.rows;
+      return result.rows[0];
     })
     .catch((e) => {
       console.log(e);
@@ -96,17 +96,22 @@ exports.addUser = addUser;
  */
 const getAllReservations = function (guest_id, limit = 10) {
   const allUserReservation = `
-  SELECT properties.*, reservations.*, avg(property_reviews.rating) as average_rating 
-  FROM reservations JOIN properties ON properties.id = reservations.property_id 
-  JOIN property_reviews ON property_reviews.property_id = properties.id  
-  WHERE end_date < now()::date AND reservations.guest_id = $1 
+  SELECT properties.*, reservations.*, avg(rating) as average_rating 
+  FROM reservations
+  JOIN properties ON reservations.property_id = properties.id
+  LEFT JOIN property_reviews ON properties.id = property_reviews.property_id   
+  WHERE reservations.guest_id = $1 
+  AND reservations.end_date > now()::date
   GROUP BY properties.id, reservations.id
-  LIMIT $2
+  ORDER BY reservations.start_date
+  LIMIT $2 
   `;
 
   return pool
     .query(allUserReservation, [guest_id, limit])
     .then(result => {
+      console.log ("guest_id", guest_id)
+      console.log("result", result.rows) // we are getting this in console but its not showing on browser
       return result.rows;
     })
     .catch((err) => {
@@ -132,6 +137,7 @@ const getAllProperties = (options, limit = 10) => {
   count(property_reviews.rating) as reviews_count
   FROM properties
   JOIN property_reviews ON properties.id = property_id 
+ 
   `;
   if (options.city) {
     queryParams.push(`%${options.city}%`);
@@ -145,13 +151,14 @@ const getAllProperties = (options, limit = 10) => {
 
   if (options.minimum_price_per_night) {
     queryParams.push(`${options.minimum_price_per_night}`)
-    queryString += ` AND  cost_per_night >= $${queryParams.length}`
+    queryString += ` AND  cost_per_night > $${queryParams.length}`
   }
 
   if (options.maximum_price_per_night) {
     queryParams.push(`${options.maximum_price_per_night}`)
-    queryString += ` AND  cost_per_night <= $${queryParams.length}`
+    queryString += ` AND  cost_per_night < $${queryParams.length}`
   }
+
 
   if (options.minimum_rating) {
     queryParams.push(`${options.minimum_rating}`)
@@ -159,7 +166,7 @@ const getAllProperties = (options, limit = 10) => {
   }
 
   queryParams.push(limit);
-  queryString += `
+  queryString += ` 
   GROUP BY properties.id
   ORDER BY cost_per_night
   LIMIT $${queryParams.length}
@@ -178,7 +185,7 @@ exports.getAllProperties = getAllProperties;
  * @return {Promise<{}>} A promise to the property.
  */
 const addProperty = function (property) {
-  console.log("costpernight" , property.cost_per_night)
+  console.log("costpernight", property.cost_per_night)
   const newProperty = `
   INSERT INTO properties (owner_id, title, description, thumbnail_photo_url, cover_photo_url,  
     cost_per_night, street, city, province, post_code, country, parking_spaces, number_of_bathrooms, number_of_bedrooms) 
@@ -194,7 +201,7 @@ const addProperty = function (property) {
 
     .then((result) => {
       console.log('resolved: =>')
-      return result.rows;
+      return result.rows[0]; // make this index
     })
     .catch((e) => {
       console.log(e);
@@ -225,12 +232,12 @@ exports.addReservation = addReservation;
 const getIndividualReservation = function (reservationId) {
   const queryString = `SELECT * FROM reservations
    WHERE reservations.id = $1`;
-   const params = [reservationId]
-   return pool
-     .query(queryString, params)
-     .then(res => res.rows[0])
-     .catch((e) => {
-       console.log(e)
+  const params = [reservationId]
+  return pool
+    .query(queryString, params)
+    .then(res => res.rows[0])
+    .catch((e) => {
+      console.log(e)
     })
 };
 
